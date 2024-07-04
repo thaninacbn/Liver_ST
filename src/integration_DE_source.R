@@ -6,7 +6,8 @@ library(scCustomize)
 library(DESeq2)
 library(citcdf)
 library(dplyr)
-
+library(ggVennDiagram)
+library(ggplot2)
 
 #Function that takes 2 samples, merges them and performs UMI recorrection -------
 MergeSamples <- function(sample1, sample2, 
@@ -287,7 +288,7 @@ CompareToBulk <- function(restable,
                           logFC_col,
                           padj_col, 
                           FC_threshold = 1,
-                          padj_threshold = 0.05){
+                          padj_threshold = 0.05, return_table = F, return_list = F){
   bulk_table <- bulktable[,c("GeneName", logFC_col, padj_col)]
   
   smolbulk <- bulk_table[which(abs(bulk_table[, logFC_col])>FC_threshold & bulk_table[, padj_col]<padj_threshold),]
@@ -295,10 +296,11 @@ CompareToBulk <- function(restable,
   pseudobulk <- rownames(restable[which(abs(restable$log2FoldChange)>FC_threshold & restable$padj<padj_threshold),])
   
   list_DE <- list(bulk = bulkgenes,
-                  pseudobulk = pseudobulk)
+                  pbulk = pseudobulk)
   
-  print(ggVennDiagram(list_DE, color= "blue") + 
-    scale_x_continuous(expand = expansion(mult = .2)))
+  print(ggVennDiagram(list_DE, label = "count") + 
+          scale_x_continuous(expand = expansion(mult = .2)))+
+    scale_fill_distiller(palette = "YlGnBu", direction = 1)
   
   unfiltered_common <- base::intersect(bulk_table$GeneName, restable$X)
   pseudobulk_common <- restable[unfiltered_common, ]
@@ -342,6 +344,12 @@ CompareToBulk <- function(restable,
   print(p1)
   print(p2)
   
+  if(return_table){
+    return(merged_df)
+  }
+  if (return_list){
+    return(list_DE)
+  }
 }
 
 
@@ -455,6 +463,26 @@ GetCommonDEGenes <- function(bulktable, restable,
 
 
 }
+
+
+#Fonction that attributes labels to DE genes -----------------------------------
+
+GetDELabels <- function(merged_table, labels_table){
+  
+  merged_df <- labels_table %>%
+    inner_join(merged_table, by = c("gene" = "GeneName"))
+  
+  filtered_df <- merged_df %>%
+    filter(condition == "both")
+  
+  result_df <- filtered_df %>%
+    select(gene, label, cluster, log2FoldChange, padj, condition )
+  
+  return(result_df)
+  
+}
+
+
 
 #testing zone waaahhhhhhhh -----------------------------
 
