@@ -1,0 +1,149 @@
+---
+title: "Marker Genes"
+author: "Thanina Chabane"
+date: "2024-04-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Marker Genes
+
+```{r, echo=FALSE, warning=FALSE}
+source("marker_genes_source.R")
+```
+
+### Open the files
+
+```{r}
+sample_1340 <- readRDS("../data/clean/samp_1340_Clustering_k6.Rds")
+sample_1352 <- readRDS("../data/clean/samp_1352_Clustering_k6.Rds")
+sample_1353 <- readRDS("../data/clean/samp_1353_Clustering_k6.Rds")
+sample_1354 <- readRDS("../data/clean/samp_1354_Clustering_gamma2_k6.Rds")
+
+```
+
+### Reorder samples manually
+
+#### Sample 1340
+
+```{r}
+DimPlot(sample_1340, group.by = "StrongForms")
+```
+
+```{r}
+sample_1340 <- BioOrder(sample_1340, c(3,6,5,2,1,4))
+DimPlot(sample_1340)
+```
+
+#### Sample 1352
+
+```{r}
+DimPlot(sample_1352, group.by = "StrongForms")
+```
+
+```{r}
+sample_1352<- BioOrder(sample_1352, c(3,2,1,4,6,5))
+DimPlot(sample_1352)
+```
+
+#### Sample 1353
+
+```{r}
+DimPlot(sample_1353, group.by = "StrongForms")
+```
+
+```{r}
+sample_1353<- BioOrder(sample_1353, c(2,5,4,1,3,6))
+DimPlot(sample_1353)
+```
+
+#### Sample 1354
+
+```{r}
+DimPlot(sample_1354, group.by = "StrongForms")
+```
+
+```{r}
+sample_1354<- BioOrder(sample_1354, c(3,5,6,2,4,1))
+DimPlot(sample_1354)
+```
+
+### Compare spot distribution across classes
+
+```{r}
+samples <- c(sample_1340, sample_1352, sample_1353, sample_1354)
+CompareConditions(samples)
+```
+
+### Compute marker genes
+
+```{r}
+strong_markers_1340 <- FindStrongMarkers(sample_1340)
+strong_markers_1352 <- FindStrongMarkers(sample_1352)
+strong_markers_1353 <- FindStrongMarkers(sample_1353)
+strong_markers_1354 <- FindStrongMarkers(sample_1354)
+```
+
+### Create Heatmaps of markers
+
+#### Sample 1340
+
+```{r}
+ClusterHeatmap(sample_1340, strong_markers_1340)
+```
+
+#### Sample 1352
+
+```{r}
+ClusterHeatmap(sample_1352, strong_markers_1352)
+```
+
+#### Sample 1353
+
+```{r}
+ClusterHeatmap(sample_1353, strong_markers_1353)
+```
+
+#### Sample 1354
+
+```{r}
+ClusterHeatmap(sample_1354, strong_markers_1354)
+```
+
+### Compare Gene expression across zones and conditions
+
+```{r}
+
+GeneZonation(samples, "Spp1")
+GeneZonation(samples, "Rida")
+GeneZonation(samples, "Mup11")
+GeneZonation(samples, "Glul")
+
+```
+
+### Save Seurat Objects
+
+```{r}
+
+saveRDS(sample_1340, "../data/clean/samp_1340_bio_ordered.Rds")
+saveRDS(sample_1352, "../data/clean/samp_1352_bio_ordered.Rds")
+saveRDS(sample_1353, "../data/clean/samp_1353_bio_ordered.Rds")
+saveRDS(sample_1354, "../data/clean/samp_1354_bio_ordered.Rds")
+
+```
+
+
+
+### Save Markers Lists
+
+```{r}
+
+write.csv(strong_markers_1340, "sample_1340_markers.csv")
+write.csv(strong_markers_1352, "sample_1352_markers.csv")
+write.csv(strong_markers_1353, "sample_1353_markers.csv")
+write.csv(strong_markers_1353, "sample_1354_markers.csv")
+
+```

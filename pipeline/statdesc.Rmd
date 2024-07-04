@@ -1,0 +1,152 @@
+---
+title: "StatDesc"
+author: "Thanina Chabane"
+date: "2024-03-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Descriptive statistics
+
+```{r}
+source("statdesc_source.R")
+```
+
+## Sample 1340
+
+```{r}
+sample_1340 <- readRDS("../data/clean/samp_1340_Normalized_fin.rds")
+```
+
+```{r}
+sample_1340 <- DescriptiveStatsPlots(sample_1340)
+```
+
+```{r}
+sample_1340 <- VariableGenes(sample_1340)
+```
+
+```{r}
+sample_1340 <- DimReduc(sample_1340)
+```
+
+```{r}
+VariableGenesComparison(sample_1340)
+```
+
+```{r}
+GeneVisualization(sample_1340, "Glul")
+```
+
+```{r}
+GeneVisualization(sample_1340, "Spp1")
+```
+
+```{r}
+saveRDS(sample_1340, "data/clean/samp_1340_DimReduc_fin.rds")
+```
+
+## Sample 1352
+
+```{r}
+sample_1352 <- readRDS("data/clean/samp_1352_Normalized_fin.rds")
+```
+
+```{r}
+sample_1352 <- DescriptiveStatsPlots(sample_1352)
+```
+
+```{r}
+sample_1352 <- VariableGenes(sample_1352)
+```
+
+```{r}
+sample_1352 <- DimReduc(sample_1352)
+```
+
+```{r}
+VariableGenesComparison(sample_1352)
+```
+
+```{r}
+GeneVisualization(sample_1352, "Glul")
+```
+
+```{r}
+GeneVisualization(sample_1352, "Spp1")
+```
+
+```{r}
+saveRDS(sample_1352, "data/clean/samp_1352_DimReduc_fin.rds")
+```
+
+## Sample 1353
+
+```{r}
+sample_1353 <- readRDS("data/clean/samp_1353_Normalized_fin.rds")
+```
+
+```{r}
+sample_1353 <- DescriptiveStatsPlots(sample_1353)
+```
+
+```{r}
+sample_1353 <- VariableGenes(sample_1353)
+```
+
+```{r}
+sample_1353 <- DimReduc(sample_1353)
+```
+
+```{r}
+VariableGenesComparison(sample_1353)
+```
+
+```{r}
+GeneVisualization(sample_1353, "Glul")
+```
+
+```{r}
+GeneVisualization(sample_1353, "Spp1")
+```
+
+```{r}
+saveRDS(sample_1353, "data/clean/samp_1353_DimReduc_fin.rds")
+```
+
+## Sample 1354
+
+```{r}
+sample_1354 <- readRDS("data/clean/samp_1354_Normalized_fewer_spots.rds")
+```
+
+```{r}
+sample_1354 <- DescriptiveStatsPlots(sample_1354)
+```
+
+```{r}
+sample_1354 <- VariableGenes(sample_1354)
+```
+
+```{r}
+sample_1354 <- DimReduc(sample_1354)
+```
+
+```{r}
+VariableGenesComparison(sample_1354)
+```
+
+```{r}
+GeneVisualization(sample_1354, "Glul")
+```
+
+```{r}
+GeneVisualization(sample_1354, "Spp1")
+```
+
+```{r}
+saveRDS(sample_1354, "data/clean/samp_1354_DimReduc_fewer_spots.rds")
+```

@@ -1,0 +1,140 @@
+---
+title: "Profile Reconstruction"
+author: "Thanina Chabane"
+date: "2024-06-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Expression profiles reconstruction
+
+```{r}
+source("profile_reconstruction_source.R")
+```
+
+## Condition CTRL
+
+```{r}
+sample_1340 <- readRDS("data/clean/samp_1340_bio_ordered.Rds")
+```
+
+```{r}
+gene = "Mup11"
+```
+
+```{r}
+
+table <- RunLinearRegionning(sample_1340, 40, start_region = "1", target_region = "6", GOI = gene, seed =20, return_df = T)
+
+ggplot(table, aes(x = scaled_dist, y = expression, fill = GOI)) +
+    geom_smooth(method = "loess", colour="black") +
+    theme_minimal() + ggtitle(label = samp1$GOI) + 
+    xlab("Minimal distance between portal and central") + 
+    theme(plot.title = element_text(hjust = 0.5, size=16, face="bold")) 
+```
+
+Beware, this function may return an error. if so, do run each command individually (plots will be generated regardless of the error)
+
+```{r}
+ RunHexagonalRegionning(sample_1340, 20, left_region = "1", right_region = "6", GOI = "Spp1", distance = 400)
+  RunHexagonalRegionning(sample_1340, 20, left_region = "1", right_region = "6", GOI = "Cyp2f2", distance = 400)
+  RunHexagonalRegionning(sample_1340, 20, left_region = "1", right_region = "6", GOI = "Mup11", distance = 400)
+  RunHexagonalRegionning(sample_1340, 20, left_region = "1", right_region = "6", GOI = "Glul", distance = 400)
+```
+
+## Condition STIM
+
+
+```{r}
+sample_1352 <- readRDS("data/clean/samp_1352_bio_ordered.Rds")
+```
+
+```{r}
+gene = "Mup11"
+```
+
+```{r}
+
+table <- RunLinearRegionning(sample_1352, 40, start_region = "1", target_region = "6", GOI = gene, seed =20, return_df = T)
+
+ggplot(table, aes(x = scaled_dist, y = expression, fill = GOI)) +
+    geom_smooth(method = "loess", colour="black") +
+    theme_minimal() + ggtitle(label = samp1$GOI) + 
+    xlab("Minimal distance between portal and central") + 
+    theme(plot.title = element_text(hjust = 0.5, size=16, face="bold")) 
+```
+
+Beware, this function may return an error. if so, do run each command individually (plots will be generated regardless of the error)
+
+```{r}
+ RunHexagonalRegionning(sample_1352, 20, left_region = "1", right_region = "6", GOI = "Spp1", distance = 400)
+  RunHexagonalRegionning(sample_1352, 20, left_region = "1", right_region = "6", GOI = "Cyp2f2", distance = 400)
+  RunHexagonalRegionning(sample_1352, 20, left_region = "1", right_region = "6", GOI = "Mup11", distance = 400)
+  RunHexagonalRegionning(sample_1352, 20, left_region = "1", right_region = "6", GOI = "Glul", distance = 400)
+```
+
+
+## Condition DaKO
+
+
+```{r}
+sample_1353 <- readRDS("data/clean/samp_1353_bio_ordered.Rds")
+```
+
+```{r}
+gene = "Mup11"
+```
+
+```{r}
+
+table <- RunLinearRegionning(sample_1353, 40, start_region = "1", target_region = "6", GOI = gene, seed =20, return_df = T)
+
+ggplot(table, aes(x = scaled_dist, y = expression, fill = GOI)) +
+    geom_smooth(method = "loess", colour="black") +
+    theme_minimal() + ggtitle(label = samp1$GOI) + 
+    xlab("Minimal distance between portal and central") + 
+    theme(plot.title = element_text(hjust = 0.5, size=16, face="bold")) 
+```
+
+Beware, this function may return an error. if so, do run each command individually (plots will be generated regardless of the error)
+
+```{r}
+ RunHexagonalRegionning(sample_1353, 20, left_region = "1", right_region = "6", GOI = "Spp1", distance = 400)
+  RunHexagonalRegionning(sample_1353, 20, left_region = "1", right_region = "6", GOI = "Cyp2f2", distance = 400)
+  RunHexagonalRegionning(sample_1353, 20, left_region = "1", right_region = "6", GOI = "Mup11", distance = 400)
+  RunHexagonalRegionning(sample_1353, 20, left_region = "1", right_region = "6", GOI = "Glul", distance = 400)
+```
+
+## Condition DaKO STIM
+
+
+```{r}
+sample_1354 <- readRDS("data/clean/samp_1354_bio_ordered.Rds")
+```
+
+```{r}
+gene = "Mup11"
+```
+
+```{r}
+
+table <- RunLinearRegionning(sample_1354, 40, start_region = "1", target_region = "6", GOI = gene, seed =20, return_df = T)
+
+ggplot(table, aes(x = scaled_dist, y = expression, fill = GOI)) +
+    geom_smooth(method = "loess", colour="black") +
+    theme_minimal() + ggtitle(label = samp1$GOI) + 
+    xlab("Minimal distance between portal and central") + 
+    theme(plot.title = element_text(hjust = 0.5, size=16, face="bold")) 
+```
+
+Beware, this function may return an error. if so, do run each command individually (plots will be generated regardless of the error)
+
+```{r}
+ RunHexagonalRegionning(sample_1354, 20, left_region = "1", right_region = "6", GOI = "Spp1", distance = 400)
+  RunHexagonalRegionning(sample_1354, 20, left_region = "1", right_region = "6", GOI = "Cyp2f2", distance = 400)
+  RunHexagonalRegionning(sample_1354, 20, left_region = "1", right_region = "6", GOI = "Mup11", distance = 400)
+  RunHexagonalRegionning(sample_1354, 20, left_region = "1", right_region = "6", GOI = "Glul", distance = 400)
+```

@@ -1,0 +1,154 @@
+---
+title: "Clustering"
+author: "Thanina Chabane"
+date: "2024-03-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Clustering
+
+```{r, echo=FALSE, warning=FALSE}
+source("clustering_source.R")
+```
+
+## Sample 1340
+
+```{r}
+sample_1340 <- readRDS("data/clean/samp_1340_DimReduc_fin.rds")
+```
+
+```{r}
+sce <- PrepSample(sample_1340)
+sample_1340 <- RunBayesSpace(sample_1340, sce, niter = 10, nrep= 10000, ncluster = 6)
+clust <- CreateMatrix(sample_1340)
+```
+
+```{r}
+majclust<- FindClusters(sample_1340, sce, clust)
+```
+
+```{r}
+sample_1340 <- ConsensusCluster(majclust)
+DimPlot(sample_1340, group.by = "StrongForms")
+SpatialDimPlot(sample_1340, group.by = "StrongForms")
+```
+
+```{r}
+saveRDS(sample_1340, "data/clean/samp_1340_Clustering_k6.Rds")
+```
+
+## Sample 1352
+
+```{r}
+sample_1352 <- readRDS("data/clean/samp_1352_DimReduc_fin.rds")
+```
+
+```{r}
+sce <- PrepSample(sample_1352)
+sample_1352 <- RunBayesSpace(sample_1352, sce, niter = 10, nrep= 10000, ncluster = 6)
+clust <- CreateMatrix(sample_1352)
+```
+
+```{r}
+majclust<- FindClusters(sample_1352, sce, clust)
+```
+
+```{r}
+sample_1352 <- ConsensusCluster(majclust)
+DimPlot(sample_1352, group.by = "StrongForms")
+SpatialDimPlot(sample_1352, group.by ="StrongForms")
+```
+
+```{r}
+saveRDS(sample_1352, "data/clean/samp_1352_Clustering_k6.Rds")
+```
+
+## Sample 1353
+
+```{r}
+sample_1353 <- readRDS("data/clean/samp_1353_DimReduc_fin.rds")
+```
+
+```{r}
+sce <- PrepSample(sample_1353)
+sample_1353 <- RunBayesSpace(sample_1353, sce, niter = 10, nrep= 10000, ncluster = 6)
+clust <- CreateMatrix(sample_1353)
+```
+
+```{r}
+majclust<- FindClusters(sample_1353, sce, clust)
+```
+
+```{r}
+sample_1353 <- ConsensusCluster(majclust)
+DimPlot(sample_1353, group.by = "StrongForms")
+SpatialDimPlot(sample_1353, group.by = "StrongForms")
+```
+
+```{r}
+saveRDS(sample_1353, "data/clean/samp_1353_Clustering_k6.Rds")
+```
+
+## Sample 1354 with the weird spots
+
+```{r}
+sample_1354 <- readRDS("data/clean/samp_1354_DimReduc_fin.rds")
+```
+
+```{r}
+DimPlot(sample_1354)
+```
+
+```{r}
+sce <- PrepSample(sample_1354)
+sample_1354 <- RunBayesSpace(sample_1354, sce, niter = 20, nrep= 10000, gamma = 1.5, ncluster = 6)
+clust <- CreateMatrix(sample_1354)
+```
+
+```{r}
+majclust<- FindClusters(sample_1354, sce, clust)
+```
+
+```{r}
+sample_1354 <- ConsensusCluster(majclust)
+DimPlot(sample_1354, group.by = "StrongForms")
+SpatialDimPlot(sample_1354, group.by = "StrongForms")
+```
+
+```{r}
+saveRDS(sample_1354, "data/clean/samp_1354_Clustering_gamma15_k6.Rds")
+```
+
+## Sample 1354 gamma 2
+
+```{r}
+sample_1354 <- readRDS("data/clean/samp_1354_DimReduc_fin.rds")
+```
+
+```{r}
+sce <- PrepSample(sample_1354)
+sample_1354 <- RunBayesSpace(sample_1354, sce, niter = 10, nrep= 10000, gamma = 1, ncluster = 7)
+clust <- CreateMatrix(sample_1354)
+```
+
+```{r}
+majclust<- FindClusters(sample_1354, sce, clust)
+```
+
+```{r}
+sample_1354 <- ConsensusCluster(majclust)
+DimPlot(sample_1354, group.by = "StrongForms")
+SpatialDimPlot(sample_1354, group.by = "StrongForms")
+```
+
+```{r}
+DimPlot(sample_1354, group.by = "bayes.space.1")
+```
+
+```{r}
+saveRDS(sample_1354, "data/clean/samp_1354_Clustering_gamma1_k7.Rds")
+```

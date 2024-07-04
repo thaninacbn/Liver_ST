@@ -1,0 +1,102 @@
+---
+title: "Gene labelling"
+author: "Thanina Chabane"
+date: "2024-06-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Gene Labelling
+
+```{r}
+source("gene_labelling_source.R")
+```
+
+## Condition CTRL
+
+```{r}
+sample_1340 <- readRDS("data/clean/samp_1340_bio_ordered.Rds")
+```
+
+```{r}
+meancounts <- GetMeanCounts(sampple_1340)
+filtered <- FilterGenes(meancounts)
+```
+
+```{r}
+labels <- LabelGenes(filtered)
+df_ctrl <- labels[["result_df"]]
+table(df_ctrl$label)
+```
+
+```{r}
+write.csv(df_ctrl, "labels_ctrl.csv")
+```
+
+## Condition STIM
+
+```{r}
+sample_1352 <- readRDS("data/clean/samp_1352_bio_ordered.Rds")
+```
+
+```{r}
+meancounts <- GetMeanCounts(samp)
+filtered <- FilterGenes(meancounts)
+```
+
+```{r}
+labels <- LabelGenes(filtered, seed = 1412)
+df_stim <- labels[["result_df"]]
+table(df_stim$label)
+```
+
+```{r}
+write.csv(df_stim, "labels_stim.csv")
+```
+
+## Condition DaKO
+
+```{r}
+sample_1353 <- readRDS("data/clean/samp_1353_bio_ordered.Rds")
+
+```
+
+```{r}
+meancounts <- GetMeanCounts(sample_1353)
+filtered <- FilterGenes(meancounts)
+```
+
+```{r}
+labels <- LabelGenes(filtered)
+
+df_dako <- labels[["result_df"]]
+table(df_dako$label)
+```
+
+```{r}
+write.csv(df_dako, "labels_dako.csv")
+```
+
+## Condition DaKO STIM
+
+```{r}
+sample_1354 <- readRDS("data/clean/samp_1354_bio_ordered.Rds")
+```
+
+```{r}
+meancounts <- GetMeanCounts(sample_1354)
+filtered <- FilterGenes(meancounts)
+```
+
+```{r}
+labels <- LabelGenes(filtered)
+df_dakostim <- labels[["result_df"]]
+table(df_dakostim$label)
+```
+
+```{r}
+write.csv(df_dakostim, "labels_dakostim.csv")
+```
