@@ -1,0 +1,265 @@
+---
+title: "Differential Gene Expression Analysis"
+author: "Thanina Chabane"
+date: "2024-07-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Differential Gene Expression Analysis
+
+```{r}
+source("integration_DE_source.R")
+```
+
+```{r}
+sample_1340 <- readRDS("data/clean/samp_1340_bio_ordered.Rds")
+sample_1352 <- readRDS("data/clean/samp_1352_bio_ordered.Rds")
+sample_1353 <- readRDS("data/clean/samp_1353_bio_ordered.Rds")
+sample_1354 <- readRDS("data/clean/samp_1354_bio_ordered.Rds")
+
+```
+
+## Pseudobulk "Cathy's version"
+
+!! This version of pseudobulk is NOT the typical pseudobulk analysis (cluster by cluster) as we do NOT have replicates. We sub-sample each condition into three, sum the counts in each sub-sample and use them as pseudoreplicates in a modified bulk analysis !!
+
+### Subsample Seurat Objects and perform DGEA
+
+```{r}
+pseudobulk_stim_ctrl <- PreparePseudobulkSamples(sample_1340, sample_1352, c("CTRL", "STIM"))
+res_stim_ctrl <- PseudobulkDE(pseudobulk_stim_ctrl, c("STIM", "CTRL"))
+```
+
+```{r}
+pseudobulk_dako_ctrl <- PreparePseudobulkSamples(sample_1340, sample_1353, c("CTRL", "DaKO"))
+res_dako_ctrl <- PseudobulkDE(pseudobulk_dako_ctrl, c("DaKO", "CTRL"))
+```
+
+```{r}
+pseudobulk_dakostim_ctrl <- PreparePseudobulkSamples(sample_1340, sample_1354, c("CTRL", "DaKOSTIM"))
+res_dakostim_ctrl <- PseudobulkDE(pseudobulk_dakostim_ctrl, c("DaKOSTIM", "CTRL"))
+```
+
+```{r}
+pseudobulk_dakostim_dako <- PreparePseudobulkSamples(sample_1353, sample_1354, c("DaKO", "DaKOSTIM"))
+res_dakostim_dako <- PseudobulkDE(pseudobulk_dakostim_dako, c("DaKOSTIM", "DaKO"))
+```
+
+```{r}
+pseudobulk_dakostim_stim <- PreparePseudobulkSamples(sample_1352, sample_1354, c("STIM", "DaKOSTIM"))
+res_dakostim_stim <- PseudobulkDE(pseudobulk_dakostim_stim, c("STIM", "CTRL"))
+```
+
+### Save results tables
+
+```{r}
+write.csv(res_stim_ctrl, "STIM_CTRL_DESeq2.csv")
+write.csv(res_dako_ctrl, "DaKO_CTRL_DESeq2.csv")
+write.csv(res_dakostim_ctrl, "DaKOSTIM_CTRL_DESeq2.csv")
+write.csv(res_dakostim_stim, "DaKOSTIM_STIM_DESeq2.csv")
+write.csv(es_dakostim_dako, "DaKOSTIM_DaKO_DESeq2.csv")
+```
+
+### Compare results to bulk analysis
+
+```{r}
+bulkdata <- read.csv2("bulk_restable.csv")
+```
+
+```{r}
+rownames(res_stim_ctrl)<- res_stim_ctrl[,1]
+#res_12 <- na.omit(res_12)
+compare_stim_ctrl <- CompareToBulk(res_stim_ctrl, bulkdata, logFC_col = "logFC_STIM_CTRL", padj_col = "Padj_STIM_CTRL", return_table = T)
+```
+
+```{r}
+rownames(res_dako_ctrl)<- res_dako_ctrl[,1]
+compare_dako_ctrl <- CompareToBulk(res_dako_ctrl, bulkdata, logFC_col = "logFC_DaKO_CTRL", padj_col = "Padj_DaKO_CTRL", return_table = T)
+```
+
+```{r}
+rownames(res_dakostim_ctrl)<- res_dakostim_ctrl[,1]
+compare_dakostim_ctrl <- CompareToBulk(res_dakostim_ctrl, bulkdata, logFC_col = "logFC_DaKOSTIM_CTRL", padj_col = "Padj_DaKOSTIM_CTRL", return_table = T)
+```
+
+```{r}
+rownames(res_dakostim_stim)<- res_dakostim_stim[,1]
+compare_dakostim_stim <- CompareToBulk(res_dakostim_stim, bulkdata, logFC_col = "logFC_DaKOSTIM_STIM", padj_col = "Padj_DaKOSTIM_STIM", return_table = T)
+```
+
+```{r}
+rownames(res_dakostim_dako)<- res_dakostim_dako[,1]
+compare_dakostim_dako <- CompareToBulk(res_dakostim_dako, bulkdata, logFC_col = "logFC_DaKOSTIM_DaKO", padj_col = "Padj_DaKOSTIM_DaKO", return_table = T)
+```
+
+## Labeling of DE genes
+
+```{r}
+labels_ctrl <- read.csv("labels_ctrl.csv")
+labels_stim <- read.csv("labels_stim.csv")
+labels_dako <- read.csv("labels_dako.csv")
+labels_dakostim <- read.csv ("labels_dakostim.csv")
+```
+
+```{r}
+result_stim_ctrl <- GetDELabels(compare_stim_ctrl, labels_ctrl)
+result_dako_ctrl <- GetDELabels(compare_dako_ctrl, labels_ctrl)
+result_dakostim_ctrl <- GetDELabels(compare_dakostim_ctrl, labels_ctrl)
+result_dakostim_stim <- GetDELabels(compare_dakostim_stim, labels_ctrl)
+result_dakostim_dako <- GetDELabels(compare_dakostim_dako, labels_ctrl)
+```
+
+```{r}
+result_stim_ctrl$test <- "STIM_vs_CTRL"
+result_dako_ctrl$test <- "DaKO_vs_CTRL"
+result_dakostim_ctrl$test <- "DaKOSTIM_vs_CTRL"
+result_dakostim_stim $test <- "DaKOSTIM_vs_STIM"
+result_dakostim_dako$test <- "DaKOSTIM_vs_DaKO"
+result_stim_ctrl$ngene <- nrow(result_stim_ctrl[which(result_stim_ctrl$condition == "both"),])
+result_dako_ctrl$ngene <- nrow(result_dako_ctrl[which(result_dako_ctrl$condition == "both"),])
+result_dakostim_ctrl$ngene <- nrow(compare_14[which(result_dakostim_ctrl$condition == "both"),])
+result_dakostim_stim$ngene <- nrow(compare_24[which(result_dakostim_stim$condition == "both"),])
+result_dakostim_dako$ngene <- nrow(compare_34[which(result_dakostim_dako$condition == "both"),])
+
+big_result <- rbind(result_stim_ctrl, result_dako_ctrl, result_dakostim_ctrl, result_dakostim_stim, result_dakostim_dako)
+big_result$label <- factor(big_result$label, levels = c("flat", "portal", "periportal", "mid", "pericentral", "central"))
+```
+
+```{r}
+df_counts <- big_result %>%
+  group_by(test, label, ngene) %>%
+  summarise(count = n())
+
+df_counts <- df_counts[- which(df_counts$label == "flat"),]
+
+df_counts$prop <- round((df_counts$count/df_counts$ngene)*100, digits = 1)
+
+ggplot(df_counts, aes(x = test, y = count, fill = label)) +
+  geom_bar(stat = "identity") +
+  coord_flip()+
+  geom_text(aes(label = paste0(prop, "%")), 
+            position = position_stack(vjust = 0.5), 
+            size = 3, # Adjust size as needed
+            check_overlap = TRUE,
+            angle = 45)+
+  labs(y = "Number of Genes",
+       fill = "Label (Condition CTRL)") +
+  theme(axis.title.y = element_blank(),
+        plot.title = element_blank())
+```
+
+## Cluster by Cluster DGEA
+
+```{r}
+library(ComplexHeatmap)
+library(UpSetR)
+```
+
+### Merging the samples
+
+```{r}
+merged_ctrl_stim <- MergeSamples(sample_1340, sample_1352, c("CTRL", "STIM"))
+```
+
+```{r}
+merged_ctrl_dako <- MergeSamples(sample_1340, sample_1353, c("CTRL", "DaKO"))
+```
+
+### Finding DE genes 
+
+```{r}
+classDE_ctrl_stim <-FindDEByClass(merged_ctrl_stim, "CTRL", "STIM")
+
+classDE_ctrl_stim <- classDE_ctrl_stim[which(classDE_ctrl_stim$p_val_adj<0.05 & abs(classDE_ctrl_stim$v4_log2FC)>1),]
+
+DE_list_ctrl_stim <- list(portal = classDE_ctrl_stim[which(classDE_ctrl_stim$cluster ==1),]$gene,
+                periportal = classDE_ctrl_stim[which(classDE_ctrl_stim$cluster ==2),]$gene,
+                midportal = classDE_ctrl_stim[which(classDE_ctrl_stim$cluster ==3),]$gene,
+                midcentral = classDE_ctrl_stim[which(classDE_ctrl_stim$cluster ==4),]$gene,
+                pericentral = classDE_ctrl_stim[which(classDE_ctrl_stim$cluster ==5),]$gene,
+                central = classDE_ctrl_stim[which(classDE_ctrl_stim$cluster ==6),]$gene)
+
+```
+
+```{r}
+classDE_ctrl_dako <-FindDEByClass(merged_ctrl_dako, "CTRL", "DaKO")
+
+classDE_ctrl_dako <- classDE_ctrl_dako[which(classDE_ctrl_dako$p_val_adj<0.05 & abs(classDE_ctrl_dako$v4_log2FC)>1),]
+
+DE_list_ctrl_dako <- list(portal = classDE_ctrl_dako[which(classDE_ctrl_dako$cluster ==1),]$gene,
+                  periportal = classDE_ctrl_dako[which(classDE_ctrl_dako$cluster ==2),]$gene,
+                  midportal = classDE_ctrl_dako[which(classDE_ctrl_dako$cluster ==3),]$gene,
+                  midcentral = classDE_ctrl_dako[which(classDE_ctrl_dako$cluster ==4),]$gene,
+                  pericentral = classDE_ctrl_dako[which(classDE_ctrl_dako$cluster ==5),]$gene,
+                  central = classDE_ctrl_dako[which(classDE_ctrl_dako$cluster ==6),]$gene)
+```
+
+### Preparing the data for plotting
+
+```{r}
+DEmat_ctrl_stim <- as.data.frame(list_to_matrix(DE_list_ctrl_stim))
+DEmat_ctrl_dako <- as.data.frame(list_to_matrix(DE_list_ctrl_dako))
+```
+
+```{r}
+DEmat_ctrl_stim <- DEmat_ctrl_stim %>%
+  mutate(
+    pbDE = case_when(
+      rownames(DEmat_ctrl_stim) %in% compare_stim_ctrl[which(compare_stim_ctrl$condition == "both"), ]$GeneName ~ "both",
+      rownames(DEmat_ctrl_stim) %in% compare_stim_ctrl[which(compare_stim_ctrl$condition == "bulk"), ]$GeneName ~ "bulk",
+      rownames(DEmat_ctrl_stim) %in% compare_stim_ctrl[which(compare_stim_ctrl$condition == "pseudobulk"), ]$GeneName ~ "pseudobulk",
+      TRUE ~ "no" # if none of the conditions are met
+    )
+  )
+
+DEmat_ctrl_dako <- DEmat_ctrl_dako %>%
+  mutate(
+    pbDE = case_when(
+      rownames(DEmat_ctrl_dako) %in% compare_dako_ctrl[which(compare_dako_ctrl$condition == "both"), ]$GeneName ~ "both",
+      rownames(DEmat_ctrl_dako) %in% compare_dako_ctrl[which(compare_dako_ctrl$condition == "bulk"), ]$GeneName ~ "bulk",
+      rownames(DEmat_ctrl_dako) %in% compare_dako_ctrl[which(compare_dako_ctrl$condition == "pseudobulk"), ]$GeneName ~ "pseudobulk",
+      TRUE ~ "no" # if none of the conditions are met
+    )
+  )
+```
+
+```{r}
+Bulk <- function(row) {
+  data <- (row["pbDE"] == "bulk") 
+}
+Pseudobulk <- function(row) {
+  data <- (row["pbDE"] == "pseudobulk") 
+}
+Both <- function(row) {
+  data <- (row["pbDE"] == "both") 
+}
+```
+
+### UpSetPlots
+
+```{r}
+upset(DEmat_ctrl_stim, query.legend = "top",
+      sets = c("portal", "periportal", "midportal", "midcentral", "pericentral", "central"),
+      order.by = "freq",
+      keep.order = T, 
+      queries = list(list(query = Bulk, color = "olivedrab3", active = T, query.name = "Bulk"),
+                     list(query = Pseudobulk, color = "mediumorchid3", active = T, query.name = "Pseudobulk"), 
+                     list(query = Both, color = "tomato", active = T, query.name = "Pseudobulk and Bulk")),
+      sets.x.label = "Number of DE genes per Cluster",
+      text.scale = c(1, 1.3, 1, 1, 1.4, 1.2))
+```
+
+```{r}
+upset(DEmat_ctrl_dako, query.legend = "top",
+      sets = c("portal", "periportal", "midportal", "midcentral", "pericentral", "central"),
+      order.by = "freq",
+      keep.order = T, 
+      queries = list( list(query = Pseudobulk, color = "mediumorchid3", active = T, query.name = "Pseudobulk"),
+                      list(query = Both, color = "tomato", active = T, query.name = "Pseudobulk and Bulk")),
+      sets.x.label = "Number of DE genes per Cluster",
+      text.scale = c(1, 1.3, 1, 1, 1.4, 1.2))
+```
