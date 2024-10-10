@@ -4,14 +4,15 @@
 A function that looks for genes that are highly correlated with mouse Hemoglobin genes. It is useful in case of blood contamination in certain samples in order to remove genes that are highly correlated with Hemoglobins. The genes that are identified should be checked in a database such as GTEx Portal for _Whole Blood_ expression.
 
 **Arguments :**
-`sample`: a Seurat Object
-`samp_num`: string, the name of the sample, usually a numeric identifier (e.g. "1353")
-`expr`: threshold for Hb expression (this value depends on the default assay for Seurat Object). used to filter the high-hb expressing spots
-`corr`: correlation threshold, default: 0.40. The threshold should be adapted in case known hb-correlated genes are not captured
+- `sample`: a Seurat Object
+- `samp_num`: string, the name of the sample, usually a numeric identifier (e.g. "1353")
+- `expr`: threshold for Hb expression (this value depends on the default assay for Seurat Object). used to filter the high-hb expressing spots
+- `corr`: correlation threshold, default: 0.40. The threshold should be adapted in case known hb-correlated genes are not captured
 
 **Returns:**
-`corr_genes`:a list.
-Contains: `Correlations` : list of dataframes of gene correlations for each hemoglobin gene. `Top_genes`: list of dataframes containing genes that are above the correlation threshold for each hemoglobin gene.
+- `corr_genes`:a list.
+Contains:--  `Correlations` : list of dataframes of gene correlations for each hemoglobin gene.
+--  `Top_genes`: list of dataframes containing genes that are above the correlation threshold for each hemoglobin gene.
 
 
 ### DescriptiveStatsPlots 
@@ -23,17 +24,12 @@ This function checks that the data is normalized using SCTransform by verifying 
 Seurat V4 SCT assay structure will be tolerated by the function.
 
 **Arguments:**
-`sample`: A Seurat object
-
-`plot.detection.rate` : Boolean, if TRUE, will generate a histogram of the detection rate of genes  by bins of 100
-
-`plot.UMI`: Boolean, if TRUE, will generate a histogram of distribution of UMI among spots
-
-`plot.QC`: Boolean, if TRUE, will generate violinplots of the number of features, number of UMIs and percentage of mitochondrial genes in raw counts and normalized data
-
-`plot.scatter`: Boolean, if TRUE, will generate a scatterplot of the number of counts as a function of the number of features in raw data and SCT Normalized data.
-
-`mt_prefix`: str, prefix for mitochondrial genes
+-`sample`: A Seurat object
+-`plot.detection.rate` : Boolean, if TRUE, will generate a histogram of the detection rate of genes  by bins of 100
+-`plot.UMI`: Boolean, if TRUE, will generate a histogram of distribution of UMI among spots
+-`plot.QC`: Boolean, if TRUE, will generate violinplots of the number of features, number of UMIs and percentage of mitochondrial genes in raw counts and normalized data
+-`plot.scatter`: Boolean, if TRUE, will generate a scatterplot of the number of counts as a function of the number of features in raw data and SCT Normalized data.
+-`mt_prefix`: str, prefix for mitochondrial genes
 
 **Returns:**
 Prints the plots specified as arguments.
@@ -45,11 +41,10 @@ Prints the plots specified as arguments.
  A function that computes Highly Variables Genes and/or Spatially Variable Genes in a sample. Adds the list of identified genes to sample metadata.
 
 **Arguments:**
-`sample`: A Seurat object
-
-`hvg.selection` : Selection method for HVG selection. Can be “vst”, “mvp” or “disp”. “vst” by default.
-`nfeatures` : Number of features to select as top variable genes
-`top_nfeatures`: number of features to show on featureplot
+-`sample`: A Seurat object
+-`hvg.selection` : Selection method for HVG selection. Can be “vst”, “mvp” or “disp”. “vst” by default.
+-`nfeatures` : Number of features to select as top variable genes
+-`top_nfeatures`: number of features to show on featureplot
 - `search_svg`: boolean, if TRUE, will search for Spatially Variable Genes
 - `svg.selection`: selection method for SVG selection. “moransi” by default, can also be “markvariogram”.
 
@@ -74,8 +69,7 @@ A function that looks for an overlap between the computed HVG and SVG. Returns a
 
 **Arguments:**
 
-sample: a Seurat object for which HVG and SVG have been computed and stored in HVG and SVG slots of metadata using VariableGenes() function.
-
+-sample: a Seurat object for which HVG and SVG have been computed and stored in HVG and SVG slots of metadata using VariableGenes() function.
 - `top_hvg:` number of HVG to take into account for comparaison, default to 20
 - `top_svg:` number of SVG to take into account for comparaison, default to 20
 
