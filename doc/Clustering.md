@@ -56,20 +56,20 @@ Names of clusters belonging to the consensus if they are found, 0 otherwise.
 Function that searches for a consensus clustering, and runs BayesSpace as long as none is found.
 
 #### Arguments: 
-`sample`: A Seurat Object
-`sce`: SingleCellExperiment object associated with sample
-`clustree`: Clustering list returned by `CreateMatrix`
-`seed`: random seed for reproductibility of the results. Default to 1412
-`niter`: number of re-iterations of BayesSpace 
-`nrep`: number of MCMC iterations of one BayesSpace run
-`ncluster`: number of clusters 
-`gamma`:
-`method`: 
-`max_runs`: maximum of times BayesSpace should be re-run.
+- `sample`: A Seurat Object
+- `sce`: SingleCellExperiment object associated with sample
+- `clustree`: Clustering list returned by `CreateMatrix`
+- `seed`: random seed for reproductibility of the results. Default to 1412
+- `niter`: number of re-iterations of BayesSpace 
+- `nrep`: number of MCMC iterations of one BayesSpace run
+- `ncluster`: number of clusters 
+- `gamma`:
+- `method`: 
+- `max_runs`: maximum of times BayesSpace should be re-run.
 #### Returns
 List containing :
-`sample`: Seurat object
-`ARI`: ARI matrix of the consensus clustering
+- `sample`: Seurat object
+- `ARI`: ARI matrix of the consensus clustering
 
 
 ### RematchClusters 
