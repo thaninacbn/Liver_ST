@@ -4,10 +4,10 @@
 A function that prepares a Seurat Object for BayesSpace clustering: Computes FindNeighbors, converts the object to SingleCellExperiment class and runs SpatialPreprocess.
 
 #### Arguments
-`sample`: a Seurat Object
-`skip.PCA`: boolean, wether to skip PCA in BayesSpace::SpatialPreprocess. Default to True
-`log.normalize`: Boolean, whether to log normalize the data. Default to false (data should be SCT normalized).
-`platform`: Spatial Transcriptomics platform, used to determine spot neighborhood structure.  Can be "Visium" (hexagonal) or "ST" (square). 
+- `sample`: a Seurat Object
+- `skip.PCA`: boolean, wether to skip PCA in BayesSpace::SpatialPreprocess. Default to True
+- `log.normalize`: Boolean, whether to log normalize the data. Default to false (data should be SCT normalized).
+- `platform`: Spatial Transcriptomics platform, used to determine spot neighborhood structure.  Can be "Visium" (hexagonal) or "ST" (square). 
 
 #### Returns
 Sample converted to sce
@@ -16,14 +16,14 @@ Sample converted to sce
 A function that performs multiple runs of BayesSpace clustering
 
 #### Arguments: 
-`sample`: A Seurat Object
-`sce`: sce object associated to the seurat object
-`seed`: random seed for reproductibility of the results. Default is 42
-`niter`: Number of runs of BayesSpace, default to 20
-`nrep`: Number of MCMC iterations for a single run of BayesSpace, default to 10000 (recommended number of iterations)
-`gamma`: Smoothing parameter. Default to 2, but values between 1-3 seem to work well.
-`parallel`: Boolean; wether to run BayesSpace in parallel. Set to True by default
-`nrun`: Number of prior calls to this function, default is 0 (initial call to RunBayesSpace). Used for saving the results in seurat object metadata.
+- `sample`: A Seurat Object
+- `sce`: sce object associated to the seurat object
+- `seed`: random seed for reproductibility of the results. Default is 42
+- `niter`: Number of runs of BayesSpace, default to 20
+- `nrep`: Number of MCMC iterations for a single run of BayesSpace, default to 10000 (recommended number of iterations)
+- `gamma`: Smoothing parameter. Default to 2, but values between 1-3 seem to work well.
+- `parallel`: Boolean; wether to run BayesSpace in parallel. Set to True by default
+- `nrun`: Number of prior calls to this function, default is 0 (initial call to RunBayesSpace). Used for saving the results in seurat object metadata.
 
 #### Returns
 Seurat Object with clusterings stored in metadata under "bayes.space.n", n being the nth run of BayesSpace
@@ -33,13 +33,13 @@ Seurat Object with clusterings stored in metadata under "bayes.space.n", n being
 A function that creates an ordered ARI matrix for one sample. Clusters the results of BayesSpace using hierarchical clustering
 
 #### Arguments: 
-`sample`: A Seurat Object on which BayesSpace clustering has been performed through `RunBayesSpace`
-`method`: method to use for hierarchical clustering. Default is complete.
+- `sample`: A Seurat Object on which BayesSpace clustering has been performed through `RunBayesSpace`
+- `method`: method to use for hierarchical clustering. Default is complete.
 
 #### Returns
 List containing:
-`tree`: The result of hierarchical clustering
-`ARI`: Ordered ARI matrix
+- `tree`: The result of hierarchical clustering
+- `ARI`: Ordered ARI matrix
 
 ### ClimbTree
 
