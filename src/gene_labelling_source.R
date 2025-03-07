@@ -169,7 +169,7 @@ LabelGenes <- function (clean, proba_threshold = 0.8, seed = 7294 ){
 
 testing = F
 
-if testing { 
+if (testing) { 
   samp <- readRDS("data/clean/samp_1340_bio_ordered.Rds")
   meancounts <- GetMeanCounts(samp)
   filtered <- FilterGenes(meancounts)
