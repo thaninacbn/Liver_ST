@@ -167,56 +167,46 @@ LabelGenes <- function (clean, proba_threshold = 0.8, seed = 7294 ){
 
 #testing zone ------------------------------------------------------------------
 
-samp <- readRDS("data/clean/samp_1340_bio_ordered.Rds")
+testing = F
 
-meancounts <- GetMeanCounts(samp)
-
-filtered <- FilterGenes(meancounts)
-
-labels <- LabelGenes(filtered)
-
-df_ctrl <- labels[["result_df"]]
-table(df_ctrl$label)
-
-
-samp <- readRDS("data/clean/samp_1352_bio_ordered.Rds")
-
-meancounts <- GetMeanCounts(samp)
-
-filtered <- FilterGenes(meancounts)
-
-labels <- LabelGenes(filtered, seed = 1412)
-
-df_stim <- labels[["result_df"]]
-table(df_stim$label)
+if testing { 
+  samp <- readRDS("data/clean/samp_1340_bio_ordered.Rds")
+  meancounts <- GetMeanCounts(samp)
+  filtered <- FilterGenes(meancounts)
+  labels <- LabelGenes(filtered)
+  df_ctrl <- labels[["result_df"]]
+  table(df_ctrl$label)
 
 
-samp <- readRDS("data/clean/samp_1353_bio_ordered.Rds")
-
-meancounts <- GetMeanCounts(samp)
-
-filtered <- FilterGenes(meancounts)
-
-labels <- LabelGenes(filtered)
-
-df_dako <- labels[["result_df"]]
-table(df_dako$label)
-
-samp <- readRDS("data/clean/samp_1354_bio_ordered.Rds")
-
-meancounts <- GetMeanCounts(samp)
-
-filtered <- FilterGenes(meancounts)
-
-labels <- LabelGenes(filtered)
-
-df_dakostim <- labels[["result_df"]]
-table(df_dakostim$label)
+  samp <- readRDS("data/clean/samp_1352_bio_ordered.Rds")
+  meancounts <- GetMeanCounts(samp)
+  filtered <- FilterGenes(meancounts)
+  labels <- LabelGenes(filtered, seed = 1412)
+  df_stim <- labels[["result_df"]]
+  table(df_stim$label)
 
 
-write.csv(df_ctrl, "labels_ctrl.csv")
-write.csv(df_stim, "labels_stim.csv")
-write.csv(df_dako, "labels_dako.csv")
-write.csv(df_dakostim, "labels_dakostim.csv")
+  samp <- readRDS("data/clean/samp_1353_bio_ordered.Rds")
 
-test <- read.csv("labels_ctrl.csv")
+  meancounts <- GetMeanCounts(samp)
+  filtered <- FilterGenes(meancounts)
+  labels <- LabelGenes(filtered)
+  df_dako <- labels[["result_df"]]
+  table(df_dako$label)
+
+  samp <- readRDS("data/clean/samp_1354_bio_ordered.Rds")
+  meancounts <- GetMeanCounts(samp)
+  filtered <- FilterGenes(meancounts)
+  labels <- LabelGenes(filtered)
+  df_dakostim <- labels[["result_df"]]
+  table(df_dakostim$label)
+
+
+  write.csv(df_ctrl, "labels_ctrl.csv")
+  write.csv(df_stim, "labels_stim.csv")
+  write.csv(df_dako, "labels_dako.csv")
+  write.csv(df_dakostim, "labels_dakostim.csv")
+  test <- read.csv("labels_ctrl.csv")
+
+}
+
